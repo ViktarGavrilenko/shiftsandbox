@@ -6,12 +6,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmailNotification implements Notification {
-    private String message;
-    private String sender;
-    private String receiver;
-    private String emailReceiver;
+    private final String message;
+    private final String sender;
+    private final String receiver;
+    private final String emailReceiver;
 
-    public EmailNotification(Builder builder) {
+    private EmailNotification(Builder builder) {
         this.message = builder.message;
         this.sender = builder.sender;
         this.receiver = builder.receiver;
@@ -38,6 +38,7 @@ public class EmailNotification implements Notification {
         private String sender;
         private String receiver;
         private String emailReceiver;
+        private static final String REGEX_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
         public Builder message(String message) {
             this.message = message;
@@ -55,7 +56,7 @@ public class EmailNotification implements Notification {
         }
 
         public Builder emailReceiver(String emailReceiver) {
-            Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Za-z]{2,6}$");
+            Pattern pattern = Pattern.compile(REGEX_EMAIL);
             Matcher matcher = pattern.matcher(emailReceiver);
             if (matcher.matches()) {
                 this.emailReceiver = emailReceiver;

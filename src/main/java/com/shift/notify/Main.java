@@ -6,6 +6,7 @@ import com.shift.notify.notificationsender.EmailNotificationSender;
 import com.shift.notify.notificationsender.NotificationSender;
 import com.shift.notify.notificationsender.SmsNotificationSender;
 import com.shift.notify.notificationsender.TelegramNotificationSender;
+import com.shift.notify.notificationsender.TypeNotify;
 import com.shift.notify.resolver.NotificationResolver;
 
 import java.util.ArrayList;
@@ -22,8 +23,8 @@ public class Main {
         NotificationResolver resolver = new NotificationResolver(notificationSenders);
 
         FacadeRootSender facadeRootSender = new FacadeRootSender();
-        EmailNotification emailNotification = new EmailNotification.Builder().emailReceiver("mail@mail.by").build();
-
-        /*      facadeRootSender.send(resolver.getNotification(TypeNotify.SMS));*/
+        EmailNotification emailNotification = new EmailNotification
+                .Builder().message("Текст сообщения электронной почты").emailReceiver("mail@mail.by").build();
+        facadeRootSender.send(resolver.getNotification(TypeNotify.EMAIL), emailNotification);
     }
 }
