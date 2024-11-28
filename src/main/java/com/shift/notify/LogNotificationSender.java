@@ -7,7 +7,7 @@ import com.shift.notify.notificationsender.TypeNotify;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LogNotificationSender implements NotificationSender {
+public class LogNotificationSender implements NotificationSender<Notification> {
     private final NotificationSender notificationSender;
     private static final String PATTERN_TIME = "yyyy-MM-dd HH:mm:ss";
     private static final String LOG_SEND = "Сообщение типа: '%s' отправлено. Время %s";

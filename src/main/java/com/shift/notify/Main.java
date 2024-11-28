@@ -30,11 +30,11 @@ public class Main {
                 .emailReceiver("mail@mail.by")
                 .receiver("email receiver")
                 .sender("email sender").build();
-        facadeRootSender.send(resolver.getNotification(TypeNotify.EMAIL), emailNotification);
-
         TelegramNotification telegramNotification = new TelegramNotification.Builder()
                 .message("telegram message").receiver("telegram receiver").sender("telegram sender")
                 .build();
+        facadeRootSender.send(resolver.getNotification(TypeNotify.EMAIL), emailNotification);
+
         facadeRootSender.send(resolver.getNotification(TypeNotify.TELEGRAM), telegramNotification);
 
         SmsNotification smsNotification = new SmsNotification.Builder()

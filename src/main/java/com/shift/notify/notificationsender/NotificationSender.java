@@ -2,8 +2,8 @@ package com.shift.notify.notificationsender;
 
 import com.shift.notify.notification.Notification;
 
-public interface NotificationSender {
-    void send(Notification notification);
+public interface NotificationSender<V extends Notification> {
+    void send(V notification);
 
     TypeNotify getType();
 }

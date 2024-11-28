@@ -1,11 +1,14 @@
 package com.shift.notify.notificationsender;
 
-import com.shift.notify.notification.Notification;
+import com.shift.notify.notification.TelegramNotification;
 
-public class TelegramNotificationSender implements NotificationSender {
+public class TelegramNotificationSender implements NotificationSender<TelegramNotification> {
+    private static final String MESSAGE = "Отправитель: %s отправил sms сообщение: %s получателю: %s";
+
     @Override
-    public void send(Notification notification) {
-        System.out.println(notification.getMessage());
+    public void send(TelegramNotification notification) {
+        System.out.printf((MESSAGE) + "%n", notification.getSender(),
+                notification.getMessage(), notification.getReceiver());
     }
 
     @Override

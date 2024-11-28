@@ -38,6 +38,10 @@ public class EmailNotification implements Notification {
         return receiver;
     }
 
+    public String getEmailReceiver() {
+        return emailReceiver;
+    }
+
     public static class Builder {
         private String message;
         private String sender;
