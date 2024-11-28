@@ -2,6 +2,8 @@ package com.shift.notify;
 
 import com.shift.notify.exceptions.DefaultExceptionHandler;
 import com.shift.notify.notification.EmailNotification;
+import com.shift.notify.notification.SmsNotification;
+import com.shift.notify.notification.TelegramNotification;
 import com.shift.notify.notificationsender.EmailNotificationSender;
 import com.shift.notify.notificationsender.NotificationSender;
 import com.shift.notify.notificationsender.SmsNotificationSender;
@@ -24,7 +26,22 @@ public class Main {
 
         FacadeRootSender facadeRootSender = new FacadeRootSender();
         EmailNotification emailNotification = new EmailNotification
-                .Builder().message("Текст сообщения электронной почты").emailReceiver("mail@mail.by").build();
+                .Builder().message("email message")
+                .emailReceiver("mail@mail.by")
+                .receiver("email receiver")
+                .sender("email sender").build();
         facadeRootSender.send(resolver.getNotification(TypeNotify.EMAIL), emailNotification);
+
+        TelegramNotification telegramNotification = new TelegramNotification.Builder()
+                .message("telegram message").receiver("telegram receiver").sender("telegram sender")
+                .build();
+        facadeRootSender.send(resolver.getNotification(TypeNotify.TELEGRAM), telegramNotification);
+
+        SmsNotification smsNotification = new SmsNotification.Builder()
+                .message("sms message")
+                .receiver("sms receiver")
+                .sender("sms sender")
+                .build();
+        facadeRootSender.send(resolver.getNotification(TypeNotify.SMS), smsNotification);
     }
 }

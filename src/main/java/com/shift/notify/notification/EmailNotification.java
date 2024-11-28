@@ -1,15 +1,20 @@
 package com.shift.notify.notification;
 
-import com.shift.notify.exceptions.InvalidEmailException;
+import com.shift.notify.exceptions.NotificationBuilderException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_EMAIL;
+import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_RECEIVER;
+import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_SENDER;
 
 public class EmailNotification implements Notification {
     private final String message;
     private final String sender;
     private final String receiver;
     private final String emailReceiver;
+
 
     private EmailNotification(Builder builder) {
         this.message = builder.message;
@@ -56,19 +61,27 @@ public class EmailNotification implements Notification {
         }
 
         public Builder emailReceiver(String emailReceiver) {
-            Pattern pattern = Pattern.compile(REGEX_EMAIL);
-            Matcher matcher = pattern.matcher(emailReceiver);
-            if (matcher.matches()) {
-                this.emailReceiver = emailReceiver;
-            } else {
-                throw new InvalidEmailException("Невалидный емайл");
-            }
+            this.emailReceiver = emailReceiver;
             return this;
         }
 
         public EmailNotification build() {
-            //Валидация
+            buildValidate();
             return new EmailNotification(this);
+        }
+
+        private void buildValidate() {
+            Pattern pattern = Pattern.compile(REGEX_EMAIL);
+            Matcher matcher = pattern.matcher(emailReceiver);
+            if (!matcher.matches()) {
+                throw new NotificationBuilderException(NOT_VALID_EMAIL);
+            }
+            if (receiver == null || receiver.isEmpty()) {
+                throw new NotificationBuilderException(NOT_VALID_RECEIVER);
+            }
+            if (sender == null || sender.isEmpty()) {
+                throw new NotificationBuilderException(NOT_VALID_SENDER);
+            }
         }
     }
 }

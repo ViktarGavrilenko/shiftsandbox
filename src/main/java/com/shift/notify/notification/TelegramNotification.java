@@ -1,5 +1,10 @@
 package com.shift.notify.notification;
 
+import com.shift.notify.exceptions.NotificationBuilderException;
+
+import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_RECEIVER;
+import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_SENDER;
+
 public class TelegramNotification implements Notification {
     private String message;
     private String sender;
@@ -48,7 +53,17 @@ public class TelegramNotification implements Notification {
         }
 
         public TelegramNotification build() {
+            buildValidate();
             return new TelegramNotification(this);
+        }
+
+        private void buildValidate() {
+            if (receiver == null || receiver.isEmpty()) {
+                throw new NotificationBuilderException(NOT_VALID_RECEIVER);
+            }
+            if (sender == null || sender.isEmpty()) {
+                throw new NotificationBuilderException(NOT_VALID_SENDER);
+            }
         }
     }
 }
