@@ -1,6 +1,7 @@
 package com.shift.notify.notification;
 
 import com.shift.notify.exceptions.NotificationBuilderException;
+import com.shift.notify.notificationsender.TypeNotify;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,6 +37,11 @@ public class EmailNotification implements Notification {
     @Override
     public String getReceiver() {
         return receiver;
+    }
+
+    @Override
+    public TypeNotify getType() {
+        return TypeNotify.EMAIL;
     }
 
     public String getEmailReceiver() {

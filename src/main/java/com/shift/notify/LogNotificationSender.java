@@ -1,6 +1,7 @@
 package com.shift.notify;
 
 import com.shift.notify.notification.Notification;
+import com.shift.notify.notificationsender.NotificationResponse;
 import com.shift.notify.notificationsender.NotificationSender;
 import com.shift.notify.notificationsender.TypeNotify;
 
@@ -18,16 +19,24 @@ public class LogNotificationSender implements NotificationSender<Notification> {
     }
 
     @Override
-    public void send(Notification notification) {
+    public NotificationResponse send(Notification notification) {
+
         System.out.printf((LOG_SEND) + "%n", notificationSender.getType(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(PATTERN_TIME)));
-        notificationSender.send(notification);
+        NotificationResponse response = notificationSender.send(notification);
+        System.out.println("Статус: " + response.getStatus() + ", тело: " + response.getBody());
         System.out.printf((LOG_GET) + "%n", notificationSender.getType(),
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern(PATTERN_TIME)));
+        return response;
     }
 
     @Override
     public TypeNotify getType() {
         return notificationSender.getType();
+    }
+
+    @Override
+    public void sendAsync(Notification notification) {
+        new Thread(() -> send(notification)).start();
     }
 }

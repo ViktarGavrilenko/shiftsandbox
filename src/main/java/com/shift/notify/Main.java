@@ -4,25 +4,17 @@ import com.shift.notify.exceptions.DefaultExceptionHandler;
 import com.shift.notify.notification.EmailNotification;
 import com.shift.notify.notification.SmsNotification;
 import com.shift.notify.notification.TelegramNotification;
-import com.shift.notify.notificationsender.EmailNotificationSender;
-import com.shift.notify.notificationsender.NotificationSender;
-import com.shift.notify.notificationsender.SmsNotificationSender;
-import com.shift.notify.notificationsender.TelegramNotificationSender;
-import com.shift.notify.notificationsender.TypeNotify;
+import com.shift.notify.notificationsender.factory.NotificationSenderFactory;
+import com.shift.notify.notificationsender.factory.NotificationSendersAllFactory;
 import com.shift.notify.resolver.NotificationResolver;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         Thread.currentThread().setUncaughtExceptionHandler(new DefaultExceptionHandler());
 
-        List<NotificationSender> notificationSenders = new ArrayList<>();
-        notificationSenders.add(new EmailNotificationSender());
-        notificationSenders.add(new SmsNotificationSender());
-        notificationSenders.add(new TelegramNotificationSender());
-        NotificationResolver resolver = new NotificationResolver(notificationSenders);
+        NotificationSenderFactory sendersAllFactory = new NotificationSendersAllFactory();
+        NotificationResolver resolver = new NotificationResolver(sendersAllFactory.getNotificationSenders());
 
         FacadeRootSender facadeRootSender = new FacadeRootSender();
         EmailNotification emailNotification = new EmailNotification
@@ -33,15 +25,17 @@ public class Main {
         TelegramNotification telegramNotification = new TelegramNotification.Builder()
                 .message("telegram message").receiver("telegram receiver").sender("telegram sender")
                 .build();
-        facadeRootSender.send(resolver.getNotification(TypeNotify.EMAIL), emailNotification);
+        facadeRootSender.send(resolver.getNotificationSender(emailNotification), emailNotification);
 
-        facadeRootSender.send(resolver.getNotification(TypeNotify.TELEGRAM), telegramNotification);
+        facadeRootSender.send(resolver.getNotificationSender(telegramNotification), telegramNotification);
+
+        facadeRootSender.sendAsync(resolver.getNotificationSender(telegramNotification), telegramNotification);
 
         SmsNotification smsNotification = new SmsNotification.Builder()
                 .message("sms message")
                 .receiver("sms receiver")
                 .sender("sms sender")
                 .build();
-        facadeRootSender.send(resolver.getNotification(TypeNotify.SMS), smsNotification);
+        facadeRootSender.send(resolver.getNotificationSender(smsNotification), smsNotification);
     }
 }

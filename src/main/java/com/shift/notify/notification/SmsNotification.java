@@ -1,6 +1,7 @@
 package com.shift.notify.notification;
 
 import com.shift.notify.exceptions.NotificationBuilderException;
+import com.shift.notify.notificationsender.TypeNotify;
 
 import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_RECEIVER;
 import static com.shift.notify.utils.NotificationExceptionConstants.NOT_VALID_SENDER;
@@ -30,6 +31,11 @@ public class SmsNotification implements Notification {
     @Override
     public String getReceiver() {
         return receiver;
+    }
+
+    @Override
+    public TypeNotify getType() {
+        return TypeNotify.SMS;
     }
 
     public static class Builder {

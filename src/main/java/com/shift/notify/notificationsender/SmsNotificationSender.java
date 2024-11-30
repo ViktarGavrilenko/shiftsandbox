@@ -6,13 +6,21 @@ public class SmsNotificationSender implements NotificationSender<SmsNotification
     private static final String MESSAGE = "Отправитель: %s отправил sms сообщение: %s получателю: %s";
 
     @Override
-    public void send(SmsNotification notification) {
-        System.out.printf((MESSAGE) + "%n", notification.getSender(),
-                notification.getMessage(), notification.getReceiver());
+    public NotificationResponse send(SmsNotification notification) {
+        return new NotificationResponse
+                .Builder()
+                .status(NotificationResult.OK)
+                .body(String.format(MESSAGE, notification.getSender(), notification.getMessage(), notification.getReceiver()))
+                .build();
     }
 
     @Override
     public TypeNotify getType() {
         return TypeNotify.SMS;
+    }
+
+    @Override
+    public void sendAsync(SmsNotification smsNotification) {
+        new Thread(() -> send(smsNotification)).start();
     }
 }
